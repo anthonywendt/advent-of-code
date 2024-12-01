@@ -32,8 +32,7 @@ def solve_puzzle_2(data):
 
     # Calculate the similarity score.
     for l in left:
-        if l in right:
-            similarity_score += l * right[l]
+        similarity_score += l * right.get(l, 0) + 1
 
     return similarity_score
 
