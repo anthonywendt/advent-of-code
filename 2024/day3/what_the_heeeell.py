@@ -13,7 +13,7 @@ def solve_puzzle_1(data):
     result = 0
     for line in data:
         matches = re.findall(pattern, line)
-        result += sum([int(a) * int(b) for a, b in matches])
+        result += sum(int(a) * int(b) for a, b in matches)
 
     return result
 
