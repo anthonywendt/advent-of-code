@@ -54,22 +54,21 @@ def move_around_map(grid, start_pos, start_dir):
             x, y = nx, ny
             visited_distinct_positions.add((x, y))  # Add new position to the set
 
-    return False, len(visited_distinct_positions)
+    return False, visited_distinct_positions
 
-# brute force all possible positions where a # can be placed and create a trap
-def count_possible_trapping_positions(grid, start_pos, start_dir):
+# brute force all possible positions where a # can be placed and create a trap around already traced path
+def count_possible_trapping_positions(grid, visited_distinct_positions, start_pos, start_dir):
     rows, cols = len(grid), len(grid[0])
     trapping_positions = 0
 
-    for x in range(rows):
-        for y in range(cols):
-            if grid[x][y] == ".":
-                # Temporarily place a # and test for a loop
-                grid[x][y] = "#"
-                loop_detected, _ = move_around_map(grid, start_pos, start_dir)
-                if loop_detected:
-                    trapping_positions += 1
-                grid[x][y] = "."  # Remove the # after testing
+    for x, y in visited_distinct_positions:
+        if grid[x][y] == ".":
+            # Temporarily place a # and test for a loop
+            grid[x][y] = "#"
+            loop_detected, _ = move_around_map(grid, start_pos, start_dir)
+            if loop_detected:
+                trapping_positions += 1
+            grid[x][y] = "."  # Remove the # after testing
 
     return trapping_positions
 
@@ -77,5 +76,6 @@ if __name__ == '__main__':
 
     grid, start_pos, start_dir = parse_map(read_input('input.txt'))
 
-    print(f"puzzle 1 result: {move_around_map(grid, start_pos, start_dir)}")
-    print(f"puzzle 2 result: {count_possible_trapping_positions(grid, start_pos, start_dir)}")
+    _, visited_distinct_positions = move_around_map(grid, start_pos, start_dir)
+    print(f"puzzle 1 result: {len(visited_distinct_positions)}")
+    print(f"puzzle 2 result: {count_possible_trapping_positions(grid, visited_distinct_positions, start_pos, start_dir)}")
